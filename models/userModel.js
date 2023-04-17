@@ -13,6 +13,14 @@ const userSchema = mongoose.Schema({
         type: String,
         required: [true, "Please add the user password"]
     },
+    name: {
+        type:String,
+        require: [true, "Please add the name"],
+    },
+    dateofbirth: {
+        type:String,
+        require: [true, "Please add the date of birth"],
+    },
 },{
     timestamps: true,
 });
