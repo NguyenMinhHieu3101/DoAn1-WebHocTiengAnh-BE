@@ -15,14 +15,13 @@ const vocabularyModel = require("../models/vocabularyModel");
 //     })
 //     console.log(`User Created ${vocab}`)
 
-
-
     // const say = require('say');
     // say.speak("")
     // res.json({ message: "Add vocab successfully." })
 // }
 const getVocab = async(req, res) => {
-    const vocab = await vocabularyModel.find();
+    const topic = req.body.topic;
+    const vocab = await vocabularyModel.find({topic});
     res.json(vocab);
     return vocab;
 }

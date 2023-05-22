@@ -27,6 +27,7 @@ app.use(express.json());
 app.use("/api/contacts", require("./routes/contactRoutes"));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/vocabulary", require("./routes/vocabRoutes"));
+app.use("/api/courses", require("./routes/courseRoutes"));
 
 app.use(errorHandler);
 app.listen(port, () => {

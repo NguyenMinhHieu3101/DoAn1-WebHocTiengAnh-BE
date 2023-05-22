@@ -4,7 +4,7 @@ const {getVocab} = require("../controllers/vocabularyController");
 
 const router = express.Router();
 
-router.get("/getVocab",getVocab)
+router.post("/getVocab",getVocab)
 
 module.exports = router;
 

@@ -1,10 +1,10 @@
 const mongoose = require("mongoose")
 const courseSchema = mongoose.Schema({
-    coursename: {
+    name: {
         type:String,
         require: [true, "Please add the course name"],
     },
-    description:{
+    des:{
         type: String,
         required: [true, "Please add the description"]
     },
