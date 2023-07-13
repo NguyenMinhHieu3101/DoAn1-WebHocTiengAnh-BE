@@ -24,11 +24,12 @@ app.use(function (req, res, next) {
 });
 
 app.use(express.json());
-app.use("/api/contacts", require("./routes/contactRoutes"));
+app.use("/api/contacts", require("./routes/contact1Routes"));
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/vocabulary", require("./routes/vocabRoutes"));
 app.use("/api/courses", require("./routes/courseRoutes"));
-
+app.use("/api/games", require("./routes/gameRoutes"));
+app.use("/api/contact", require("./routes/contact1Routes"));
 app.use(errorHandler);
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`)

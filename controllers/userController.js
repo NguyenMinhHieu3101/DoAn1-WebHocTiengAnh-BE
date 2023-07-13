@@ -9,7 +9,7 @@ const vocabularyModel = require("../models/vocabularyModel");
 //@route POST/api/users/register
 //@access public
 const registerUser = asyncHandler(async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, name, dateofbirth} = req.body;
     if (!username || !email || !password) {
         res.status(400);
         throw new Error("All fields are mandatory!");
@@ -27,6 +27,8 @@ const registerUser = asyncHandler(async (req, res) => {
         username,
         email,
         password: hashedPassword,
+        name,
+        dateofbirth
     })
     console.log(`User Created ${user}`)
     if (user) {
@@ -48,10 +50,8 @@ const loginUser = asyncHandler(async (req, res) => {
     if (!email || !password) {
         res.status(400);
         throw new Error("All fields are mandatory!");
-
     }
     const user = await User.findOne({ email })
-    //compare password with hashedpassword
     if (user && (await bcrypt.compare(password, user.password))) {
         const accessToken = jwt.sign({
             user: {
@@ -61,14 +61,17 @@ const loginUser = asyncHandler(async (req, res) => {
             },
         },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: "3m" })
+           { expiresIn: "3m" }
+           )
             ;
-        res.status(200).json({ accessToken })
+          
+        res.status(200).json({ user })
+   
+       
     } else {
         res.status(401)
         throw new Error("email or password is not valid");
     }
-    res.json({ message: "login user" })
 });
 
 //@desc Current user info

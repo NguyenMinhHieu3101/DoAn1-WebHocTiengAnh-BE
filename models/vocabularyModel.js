@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 const vocabularySchema = mongoose.Schema({
     name: {
         type:String,
-        require: [true, "Please add the vocabulary name"],
+        required: [true, "Please add the vocabulary name"],
     },
     meaning:{
         type: String,
@@ -10,11 +10,11 @@ const vocabularySchema = mongoose.Schema({
     },
     image: {
         type:String,
-        require: [true, "Please add the image"],
+        required: [true, "Please add the image"],
     },
     sound: {
         type: String,
-        require: [true,"Please add the sound"]
+        required: [true,"Please add the sound"]
     }
    
 },{
