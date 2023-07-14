@@ -1,23 +1,13 @@
 const mongoose = require("mongoose")
 const userCourseSchema = mongoose.Schema({
-    course_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: "Course",
-    },
-    user_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: "User",
-    },
-    starttime:{
+    course: {
         type: String,
-        require: true,
+        required: true,
     },
-    endtime:{
+    user: {
         type: String,
-        require: true,
-    }
+        required: true,
+    },
 },{
     timestamps: true,
 });

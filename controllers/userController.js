@@ -2,8 +2,8 @@ const asyncHandler = require("express-async-handler")
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel")
+const UserCourse = require("../models/userCourseModel")
 const path = require('path');
-const vocabularyModel = require("../models/vocabularyModel");
 
 //@desc Register a user
 //@route POST/api/users/register
@@ -80,19 +80,43 @@ const loginUser = asyncHandler(async (req, res) => {
 const currentUser = asyncHandler((req, res) => {
     res.json(req.user)
 });
+//@desc Current user info
+//@route PUT/api/users/changeInfo
+//@access public
+const changeInfo = async (req, res) => {
+      const updatedUser = req.body;
+      const user = await User.findByIdAndUpdate('64b0fe3c952bdd79e8be3f1f', updatedUser, { new: true });
+      if (user) {
+        res.status(200).json({ user });
+      } else {
+        res.status(404).json({ message: "User not found" });
+      }
+   
+  };
 
-const testVoice = async (req, res) => {
-
-
-    const vocab = await vocabularyModel.create({
-        name: "comet",
-        meaning:"Sao chổi",
-        image: "a",
-        sound:"/ˈkɑː.mɪt/"
-    })
-    console.log(`User Created ${vocab}`)
-    const say = require('say');
-    say.speak("")
-    res.json({ message: "Add vocab successfully." })
+const getUserCourse = async(req, res) => {
+    const users_courses = await UserCourse.find();
+    res.json(users_courses);
+    return users_courses;
 }
-module.exports = { registerUser, loginUser, currentUser, testVoice }
+const saveUserCourse = async (req, res) => {
+    const { user, course } = req.body;
+    try {
+      const userCourse = await UserCourse.findOne({ user, course });
+  
+      if (!userCourse) {
+        const newUserCourse = await UserCourse.create({ user, course });
+        console.log(newUserCourse);
+        res.json(newUserCourse);
+        console.log(`User Course Created: ${newUserCourse}`);
+        return newUserCourse;
+      }
+  
+      // If userCourse exists, you can handle the scenario accordingly
+  
+    } catch (error) {
+      console.log('Error:', error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  };
+module.exports = { registerUser, loginUser, currentUser, changeInfo, getUserCourse, saveUserCourse}
