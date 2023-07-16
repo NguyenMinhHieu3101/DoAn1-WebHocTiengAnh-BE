@@ -126,9 +126,10 @@ const saveUserCourse = async (req, res) => {
 
   const getContinueCourses = async (req, res) => {
     try {
+     console.log(req.query.user)
       const continueCourses = await UserCourse.find();
   
-      const filteredCourses = continueCourses.filter((course) => course.user == req.body.user);
+      const filteredCourses = continueCourses.filter((course) => course.user == req.query.user);
       const courses_name = filteredCourses.map((course) => course.course);
       const courses = await Course.find({ name: { $in: courses_name } });
 
