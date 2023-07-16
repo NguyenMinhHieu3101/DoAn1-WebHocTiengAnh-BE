@@ -117,12 +117,25 @@ const saveUserCourse = async (req, res) => {
       }
       else{
       // If userCourse exists, you can handle the scenario accordingly
-     
       }
-  
     } catch (error) {
       console.log('Error:', error);
       res.status(500).json({ message: "Internal Server Error" });
     }
   };
-module.exports = { registerUser, loginUser, currentUser, changeInfo, getUserCourse, saveUserCourse}
+
+  const getContinueCourses = async (req, res) => {
+    try {
+      const continueCourses = await UserCourse.find();
+  
+      const filteredCourses = continueCourses.filter((course) => course.user == req.body.user);
+    //   const mappedCourses = filteredCourses.map((course) => course.user);
+  
+      res.json(filteredCourses);
+      return filteredCourses;
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+module.exports = { registerUser, loginUser, currentUser, changeInfo, getUserCourse, saveUserCourse, getContinueCourses}
