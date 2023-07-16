@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler")
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel")
+const Course = require("../models/courseModel")
 const UserCourse = require("../models/userCourseModel")
 const path = require('path');
 
@@ -106,13 +107,18 @@ const saveUserCourse = async (req, res) => {
   
       if (!userCourse) {
         const newUserCourse = await UserCourse.create({ user, course });
+        const updatedCourse = await Course.findOne({name: course });
+        updatedCourse.amount = updatedCourse.amount + 1;
+        await Course.findByIdAndUpdate(updatedCourse._id, updatedCourse);
         console.log(newUserCourse);
         res.json(newUserCourse);
         console.log(`User Course Created: ${newUserCourse}`);
         return newUserCourse;
       }
-  
+      else{
       // If userCourse exists, you can handle the scenario accordingly
+     
+      }
   
     } catch (error) {
       console.log('Error:', error);

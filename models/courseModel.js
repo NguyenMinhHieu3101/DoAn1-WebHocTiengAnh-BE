@@ -12,9 +12,9 @@ const courseSchema = mongoose.Schema({
         type:String,
         require: [true, "Please add the image"],
     },
-    maxcandidates: {
+    amount: {
         type: Number,
-        require: [true,"Please add the max number of candidates"]
+        require: [true,"Please add the number of candidates"]
     }, 
     creatorname: {
         type:String,
