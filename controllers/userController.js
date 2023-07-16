@@ -129,10 +129,12 @@ const saveUserCourse = async (req, res) => {
       const continueCourses = await UserCourse.find();
   
       const filteredCourses = continueCourses.filter((course) => course.user == req.body.user);
-    //   const mappedCourses = filteredCourses.map((course) => course.user);
+      const courses_name = filteredCourses.map((course) => course.course);
+      const courses = await Course.find({ name: { $in: courses_name } });
+
   
-      res.json(filteredCourses);
-      return filteredCourses;
+      res.json(courses);
+      return courses;
     } catch (error) {
       console.error('Error:', error);
       res.status(500).json({ error: 'Internal Server Error' });
