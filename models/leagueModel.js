@@ -2,19 +2,19 @@ const mongoose = require("mongoose");
 const leagueSchema = mongoose.Schema({
     user:{
         type: String,
-        require: true,
+        required: true,
     },
     image: {
         type:String,
-        required: true,
+        required: false,
     },
     productName:{
         type: String,
-        require: true,
+        required: true,
     },
     score:{
         type: Number,
-        require: true,
+        required: true,
     }
 },{
     timestamps: true,
