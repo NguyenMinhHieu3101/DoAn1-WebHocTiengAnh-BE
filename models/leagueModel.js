@@ -15,7 +15,7 @@ const leagueSchema = mongoose.Schema({
     score:{
         type: Number,
         required: true,
-    }
+    },
 },{
     timestamps: true,
 });
