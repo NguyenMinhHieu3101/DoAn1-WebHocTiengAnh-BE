@@ -185,11 +185,15 @@ const getGamesData = async (req, res) => {
   try {
     let productName = req.query.courseName;
     let games = await Game.find();
+
     const vocabs = await Vocab.find({ topic: productName.toLowerCase() });
 
     games = games.map(game => game.toObject());
+    games = games.sort((a, b) => a.lesson - b.lesson);
+
     const randomVocabs = getRandomItems(vocabs, 4);
     console.log(randomVocabs + "Số lương: ", randomVocabs.length);
+
     for (let i = 0; i < games.length; i++) {
       games[i].topic = req.query.courseName;
       games[i].state = false;
@@ -221,7 +225,12 @@ const getGamesData = async (req, res) => {
           }
         case 'Game2':
           {
-
+            const randomVocab = getRandomItems(vocabs, 1);
+            games[i].vietnamesePhrase = randomVocab[0].meaning;
+            games[i].image = randomVocab[0].image;
+            games[i].correctAnswer = randomVocab[0].name;
+            games[i].correctText = randomVocab[0].name;
+            games[i].question = `Write the meaning in English of "${randomVocab[0].meaning}"`;    
           }
           break;
         case 'Game3':
