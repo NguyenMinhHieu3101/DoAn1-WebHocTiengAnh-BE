@@ -1,6 +1,7 @@
-const Game1 = require("../models/game1Model.js");
+const Game = require("../models/gameModel.js");
 const MiniGame = require("../models/miniGameModel.js");
 const League = require("../models/leagueModel.js");
+const Vocab = require("../models/vocabularyModel.js");
 
 const getGame1 = async (req, res) => {
   try {
@@ -153,6 +154,97 @@ const getLeagueMeThis = async (req, res) => {
   }
 };
 
+function getRandomItems(array, count) {
+  const result = [];
+  const length = array.length;
+
+  // Kiểm tra nếu số lượng đối tượng cần chọn lớn hơn số lượng đối tượng trong mảng
+  if (count > length) {
+    throw new Error("Số lượng đối tượng cần chọn lớn hơn số lượng đối tượng trong mảng.");
+  }
+
+  // Tạo một bản sao của mảng gốc để không làm thay đổi mảng ban đầu
+  const copy = array.slice();
+
+  // Chọn ngẫu nhiên đối tượng từ mảng
+  while (result.length < count) {
+    const randomIndex = Math.floor(Math.random() * copy.length);
+    const randomItem = copy[randomIndex];
+
+    // Kiểm tra xem đối tượng đã được chọn chưa
+    if (!result.includes(randomItem)) {
+      result.push(randomItem);
+      // Xóa đối tượng đã được chọn khỏi bản sao của mảng
+      copy.splice(randomIndex, 1);
+    }
+  }
+
+  return result;
+}
+const getGamesData = async (req, res) => {
+  try {
+    let productName = req.query.courseName;
+    let games = await Game.find();
+    const vocabs = await Vocab.find({ topic: productName.toLowerCase() });
+
+    games = games.map(game => game.toObject());
+    const randomVocabs = getRandomItems(vocabs, 4);
+    console.log(randomVocabs + "Số lương: ", randomVocabs.length);
+    for (let i = 0; i < games.length; i++) {
+      games[i].topic = req.query.courseName;
+      games[i].state = false;
+      switch (games[i].category) {
+        case 'Game1':
+          {
+            const answerVocabs = getRandomItems(randomVocabs, 1);
+            games[i].question = `What does "${answerVocabs[0].name}" means in Vietnamese?`
+            let answerLetter = '';
+
+            let answerOptions = [];
+            for (let j = 0; j < randomVocabs.length; j++) {
+              if(randomVocabs[j].name === answerVocabs[0].name) {
+                answerLetter = String.fromCharCode(65 + j);
+              }
+              const option = {
+                id: String.fromCharCode(65 + j),
+                text: randomVocabs[j].meaning
+              };
+              answerOptions.push(option);
+            }
+            console.log("4 cái đáp án nè: " + JSON.stringify(answerOptions));
+            games[i].answerOptions = answerOptions;
+
+            games[i].correctAnswer = answerLetter;
+            games[i].correctText = answerVocabs[0].meaning;
+
+            break;
+          }
+        case 'Game2':
+          {
+
+          }
+          break;
+        case 'Game3':
+          {
+
+          }
+          break;
+        case 'Game4':
+          {
+
+          }
+          break;
+        default:
+          break;
+      }
+    }
+    res.json(games);
+    return games;
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
 module.exports = {
   getGame1,
   saveMiniGame,
@@ -160,5 +252,6 @@ module.exports = {
   getLeague,
   getLeagueThisCourse,
   getLeagueMeAll,
-  getLeagueMeThis
+  getLeagueMeThis,
+  getGamesData
 };

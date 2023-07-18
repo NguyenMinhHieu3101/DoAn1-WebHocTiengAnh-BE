@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const game1Schema = mongoose.Schema({
+const game2Schema = mongoose.Schema({
     kind: {
         type: String,
         required: [true, "Please add the game kind"],
@@ -28,9 +28,9 @@ const game1Schema = mongoose.Schema({
     //     type: String,
     //     required: [true, "Please add the game question"],
     // },
-    // answerOptions: {
+    // vietnamesePhrase:{
     //     type: String,
-    //     required: [true, "Please add the game answer options"],
+    //     required: [true, "Please add the game vietnamese phrase"],
     // },
     // image: {
     //     type: String,
@@ -40,6 +40,10 @@ const game1Schema = mongoose.Schema({
     //     type: String,
     //     required: [true, "Please add the game correct answer"],
     // }, 
+    // correctText:{
+    //     type: String,
+    //     required: [true, "Please add the game correct text"],
+    // },
     score: {
         type: Number,
         required: [true, "Please add the game score"],
@@ -47,4 +51,4 @@ const game1Schema = mongoose.Schema({
 }, {
     timestamps: true,
 });
-module.exports = mongoose.model("Game1", game1Schema);
+module.exports = mongoose.model("Game2", game2Schema);
