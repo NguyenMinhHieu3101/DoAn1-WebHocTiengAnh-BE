@@ -53,7 +53,7 @@ function calculateTotalScores(users) {
   return uniqueUsers;
 }
 
-let userTopAll, userTopThis;
+let userTopAll = 0, userTopThis = 0;
 
 const getLeague = async (req, res) => {
   try {
