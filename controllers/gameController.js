@@ -181,6 +181,70 @@ function getRandomItems(array, count) {
 
   return result;
 }
+function splitStringIntoShuffledObjects(inputString) {
+  const words = inputString.trim().split(/\s+/).filter(word => word !== '');
+  const objectCount = Math.min(4, words.length);
+  const objects = [];
+  const originalOrderString = [];
+
+  for (let i = 0; i < objectCount; i++) {
+    const word = words[i];
+    const id = String.fromCharCode(65 + i);
+    const object = {
+      text: word
+    };
+    objects.push(object);
+    originalOrderString.push(id);
+  }
+
+  shuffleArray(objects);
+  shuffleArray(originalOrderString);
+
+  return { objects, originalOrderString: originalOrderString.join('') };
+}
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+function splitStringIntoShuffledObjects(inputString) {
+  const words = inputString.split(' ').filter(word => word.trim() !== '');
+  const objectCount = 4;
+  const wordsPerObject = Math.ceil(words.length / objectCount);
+  const objects = [];
+  let originalOrderString = '';
+
+  for (let i = 0; i < objectCount; i++) {
+    const startIndex = i * wordsPerObject;
+    const endIndex = startIndex + wordsPerObject;
+    const text = words.slice(startIndex, endIndex).join(' ').trim();
+
+    if (text !== '') {
+      const object = {
+        id: String.fromCharCode(65 + i),
+        text: text
+      };
+      objects.push(object);
+      originalOrderString += object.id;
+    }
+  }
+
+  objects.sort(() => Math.random() - 0.5);
+
+  return { objects, originalOrderString };
+}
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+
+
 const getGamesData = async (req, res) => {
   try {
     let productName = req.query.courseName;
@@ -206,7 +270,7 @@ const getGamesData = async (req, res) => {
 
             let answerOptions = [];
             for (let j = 0; j < randomVocabs.length; j++) {
-              if(randomVocabs[j].name === answerVocabs[0].name) {
+              if (randomVocabs[j].name === answerVocabs[0].name) {
                 answerLetter = String.fromCharCode(65 + j);
               }
               const option = {
@@ -230,16 +294,52 @@ const getGamesData = async (req, res) => {
             games[i].image = randomVocab[0].image;
             games[i].correctAnswer = randomVocab[0].name;
             games[i].correctText = randomVocab[0].name;
-            games[i].question = `Write the meaning in English of "${randomVocab[0].meaning}"`;    
+            games[i].question = `Write the meaning in English of "${randomVocab[0].meaning}"`;
           }
           break;
         case 'Game3':
           {
-
+            const randomVocabs = getRandomItems(vocabs, 4);
+            games[i].question = "Drag and drop words that match their meanings";
+            let answerOptions = [];
+            let textOptions = [];
+            let correctAnswer = [];
+            let correctText = '';
+            for (let j = 0; j < randomVocabs.length; j++) {
+              const option_letter = {
+                id: String.fromCharCode(97 + j),
+                text: randomVocabs[j].name
+              };
+              const option_number = {
+                id: j+1,
+                text: randomVocabs[j].meaning
+              };
+              const option_answer = {
+                text: String.fromCharCode(97 + j),
+                id: j+1
+              }
+              correctText+= `${randomVocabs[j].meaning}: ${randomVocabs[j].name}, `;
+              answerOptions.push(option_letter);
+              textOptions.push(option_number);
+              correctAnswer.push(option_answer);
+            }
+            shuffleArray(answerOptions);
+            games[i].answerOptions = answerOptions;
+            games[i].textOptions = textOptions;
+            games[i].correctAnswer = correctAnswer;
+            games[i].correctText = correctText;
           }
           break;
         case 'Game4':
           {
+            games[i].question = "Match the words into correct sentences: ";
+            // Ví dụ sử dụng hàm:
+            
+            const input = `It is the best ${randomVocabs[0].name} in this world and I love it.`;
+            const result = splitStringIntoShuffledObjects(input);
+            games[i].answerOptions = result.objects;
+            games[i].correctAnswer = result.originalOrderString;
+            games[i].correctText = input;
 
           }
           break;
