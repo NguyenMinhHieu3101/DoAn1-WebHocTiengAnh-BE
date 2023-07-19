@@ -92,10 +92,11 @@ const currentUser = asyncHandler((req, res) => {
 //@access public
 const changeInfo = async (req, res) => {
   const updatedUser = req.body;
-  const user = await User.findByIdAndUpdate('64b0fe3c952bdd79e8be3f1f', updatedUser, { new: true });
+  console.log(req.body)
+  const user = await User.findByIdAndUpdate({_id: req.body._id, password : req.body.password}, updatedUser, { new: true });
   if (user) {
     res.status(200).json({ user });
-  } else {
+  } else { 
     res.status(404).json({ message: "User not found" });
   }
 
