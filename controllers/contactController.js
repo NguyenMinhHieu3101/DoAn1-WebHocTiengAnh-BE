@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 
 // Tạo một transporter để gửi email
+// test cái git
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
